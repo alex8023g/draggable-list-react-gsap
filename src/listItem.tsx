@@ -1,4 +1,4 @@
-import { useRef } from "react";
+// import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Draggable } from "gsap/Draggable";
@@ -11,7 +11,7 @@ type Props = {
   container: React.MutableRefObject<HTMLUListElement | null>;
 };
 
-export default function ListItem({ item, container }: Props) {
+export default function ListItem({ item /* , container */ }: Props) {
   return (
     <li
       id={item.id}

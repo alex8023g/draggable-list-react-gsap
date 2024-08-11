@@ -32,6 +32,7 @@ function App() {
   useEffect(() => {
     container = document.querySelector(".g-container")!;
   }, []);
+
   useGSAP(
     () => {
       const rowSize = 100; // => container height / number of items
@@ -49,23 +50,6 @@ function App() {
         dataClone
       );
       // if (container) gsap.to(container, { autoAlpha: 1 });
-
-      function changeIndex(item: Sortable, to: number) {
-        // Change position in array
-        sortables.splice(to, 0, sortables.splice(item.index, 1)[0]);
-
-        // Change element's position in DOM. Not always necessary. Just showing how.
-        dataClone.splice(to, 0, dataClone.splice(item.index, 1)[0]);
-        // if (to === total - 1) {
-        //   container!.appendChild(item.element);
-        // } else {
-        //   const i = item.index > to ? to : to + 1;
-        //   container!.insertBefore(item.element, container!.children[i]);
-        // }
-
-        // Set index for each sortable
-        sortables.forEach((sortable, index) => sortable.setIndex(index));
-      }
 
       function Sortable(element: Element, index: number) {
         const content = element.querySelector(".item-content");
@@ -109,6 +93,7 @@ function App() {
           const fromIndex = index === data.length - 1 ? index - 1 : index;
 
           const tl = gsap.timeline();
+
           tl.set(element, { zIndex: -index })
             .fromTo(
               element,
@@ -119,10 +104,12 @@ function App() {
               }
             )
             .set(element, { zIndex: 0 });
-        } else if (actionType.current === "firstRender") {
-          gsap.set(element, { y: index * rowSize });
-        } else {
+        } else if (actionType.current === "delItem") {
+          console.log("delItem");
           gsap.to(element, { y: index * rowSize });
+        } else {
+          console.log("else");
+          gsap.set(element, { y: index * rowSize });
         }
 
         function setIndex(index: number) {
@@ -135,7 +122,7 @@ function App() {
           }
         }
 
-        function onDragFunc() {
+        function onDragFunc(this: Draggable) {
           // Calculate the current index based on element's position
           const index = clamp(Math.round(this.y / rowSize), 0, total - 1);
 
@@ -150,6 +137,14 @@ function App() {
       // Clamps a value to a min/max
       function clamp(value: number, a: number, b: number) {
         return value < a ? a : value > b ? b : value;
+      }
+      function changeIndex(item: Sortable, to: number) {
+        // Change position in array
+        sortables.splice(to, 0, sortables.splice(item.index, 1)[0]);
+
+        dataClone.splice(to, 0, dataClone.splice(item.index, 1)[0]);
+
+        sortables.forEach((sortable, index) => sortable.setIndex(index));
       }
       actionType.current = null;
     },
@@ -186,7 +181,7 @@ function App() {
           actionType.current = "addItem";
         }}
       >
-        s add item
+        add item
       </button>
     </>
   );
