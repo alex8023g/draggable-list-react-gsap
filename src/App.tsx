@@ -4,7 +4,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Draggable } from "gsap/Draggable";
 import { nanoid } from "nanoid";
-import ListItem from "./listItem";
+import ListItem from "./components/ListItem";
+import { AddBtn } from "./components/AddBtn";
 
 type Sortable = {
   dragger: Draggable;
@@ -156,14 +157,7 @@ function App() {
           />
         ))}
       </ul>
-      <button
-        onClick={() => {
-          setData((st) => [...st, nanoid()]);
-          actionType.current = "addItem";
-        }}
-      >
-        add item
-      </button>
+      <AddBtn setData={setData} actionType={actionType} />
     </>
   );
 }
