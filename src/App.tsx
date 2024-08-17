@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Draggable } from "gsap/Draggable";
 import { nanoid } from "nanoid";
+import ListItem from "./listItem";
 
 type Sortable = {
   dragger: Draggable;
@@ -155,24 +156,25 @@ function App() {
       <h1>List</h1>
       <ul className="g-container">
         {data.map((item, i) => (
-          <li
-            className="g-list-item"
-            key={item}
-            ref={(el) => (refItems.current[i] = el!)}
-          >
-            <div className="item-content">
-              <span
-                onClick={() => {
-                  setData((st) => st.filter((it) => it !== item));
-                  actionType.current = "delItem";
-                  // refItems.current.splice(i, 1);
-                }}
-              >
-                del
-              </span>{" "}
-              {item}
-            </div>
-          </li>
+          <ListItem item={item} setData={setData} actionType={actionType} />
+          // <li
+          //   className="g-list-item"
+          //   key={item}
+          //   ref={(el) => (refItems.current[i] = el!)}
+          // >
+          //   <div className="item-content">
+          //     <span
+          //       onClick={() => {
+          //         setData((st) => st.filter((it) => it !== item));
+          //         actionType.current = "delItem";
+          //         // refItems.current.splice(i, 1);
+          //       }}
+          //     >
+          //       del
+          //     </span>{" "}
+          //     {item}
+          //   </div>
+          // </li>
         ))}
       </ul>
       <button
