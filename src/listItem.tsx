@@ -2,7 +2,7 @@ type Props = {
   item: string;
   setData: React.Dispatch<React.SetStateAction<string[]>>;
   actionType: React.MutableRefObject<
-    "delItem" | "addItem" | "firstRender" | null
+    "delItem" | "addItem" | "firstRender" | "dragItem" | null
   >;
 };
 
