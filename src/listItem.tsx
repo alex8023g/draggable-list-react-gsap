@@ -1,23 +1,25 @@
-// import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { Draggable } from "gsap/Draggable";
-
-gsap.registerPlugin(Draggable);
-gsap.registerPlugin(useGSAP);
-
 type Props = {
-  item: { id: string; data: string };
-  container: React.MutableRefObject<HTMLUListElement | null>;
+  item: string;
+  setData: React.Dispatch<React.SetStateAction<string[]>>;
+  actionType: React.MutableRefObject<
+    "delItem" | "addItem" | "firstRender" | "dragItem" | null
+  >;
 };
 
-export default function ListItem({ item /* , container */ }: Props) {
+export default function ListItem({ item, setData, actionType }: Props) {
   return (
-    <li
-      id={item.id}
-      className={`listitem border ${item.id} h-10 mb-2 bg-white z-0`}
-    >
-      {item.data}
+    <li className="g-list-item">
+      <div className="item-content">
+        <span
+          onClick={() => {
+            setData((st) => st.filter((it) => it !== item));
+            actionType.current = "delItem";
+          }}
+        >
+          del
+        </span>{" "}
+        {item}
+      </div>
     </li>
   );
 }

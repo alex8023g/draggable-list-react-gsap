@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Draggable } from "gsap/Draggable";
 import { nanoid } from "nanoid";
+import ListItem from "./listItem";
 
 type Sortable = {
   dragger: Draggable;
@@ -14,7 +15,6 @@ type Sortable = {
 
 gsap.registerPlugin(Draggable);
 gsap.registerPlugin(useGSAP);
-let container: Element | undefined = undefined;
 function App() {
   const [data, setData] = useState([
     "1 Alfa",
@@ -25,17 +25,12 @@ function App() {
 
   const actionType = useRef<"addItem" | "delItem" | "dragItem" | null>(null);
 
-  const refItems = useRef<HTMLLIElement[]>([]);
-
-  useEffect(() => {
-    container = document.querySelector(".g-container")!;
-  }, []);
+  const container = useRef<HTMLUListElement>(null);
 
   useGSAP(
     () => {
       const rowSize = 100; // => container height / number of items
       const listItems = Array.from(document.querySelectorAll(".g-list-item")); // Array of elements
-      // const listItems = refItems.current; // Array of elements
       console.log("🚀 ~ App ~ listItems:", listItems);
       const sortables = listItems.map(Sortable); // Array of sortables
       const total = sortables.length;
@@ -47,11 +42,9 @@ function App() {
         sortables.length,
         dataClone
       );
-      // if (container) gsap.to(container, { autoAlpha: 1 });
 
       function Sortable(element: Element, index: number) {
         const content = element.querySelector(".item-content");
-        // const order = element.querySelector(".order");
 
         const animation = gsap.to(content, {
           boxShadow: "rgba(0,0,0,0.2) 0px 16px 32px 0px",
@@ -72,7 +65,6 @@ function App() {
               animation.reverse();
               gsap.to(element, { y: sortable.index * rowSize });
               setData(dataClone);
-              container = document.querySelector(".g-container")!;
             }
           },
           cursor: "inherit",
@@ -115,7 +107,6 @@ function App() {
 
         function setIndex(index: number) {
           sortable.index = index;
-          // order!.textContent = String(index + 1);
 
           // Don't layout if you're dragging
           if (!dragger.isDragging) {
@@ -155,26 +146,14 @@ function App() {
   return (
     <>
       <h1>List</h1>
-      <ul className="g-container">
+      <ul className="g-container" ref={container}>
         {data.map((item, i) => (
-          <li
-            className="g-list-item"
+          <ListItem
             key={item}
-            ref={(el) => (refItems.current[i] = el!)}
-          >
-            <div className="item-content">
-              <span
-                onClick={() => {
-                  setData((st) => st.filter((it) => it !== item));
-                  actionType.current = "delItem";
-                  // refItems.current.splice(i, 1);
-                }}
-              >
-                del
-              </span>{" "}
-              {item}
-            </div>
-          </li>
+            item={item}
+            setData={setData}
+            actionType={actionType}
+          />
         ))}
       </ul>
       <button
