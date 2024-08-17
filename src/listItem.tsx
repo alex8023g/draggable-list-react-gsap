@@ -8,16 +8,12 @@ type Props = {
 
 export default function ListItem({ item, setData, actionType }: Props) {
   return (
-    <li
-      className="g-list-item"
-      // ref={(el) => (refItems.current[i] = el!)}
-    >
+    <li className="g-list-item">
       <div className="item-content">
         <span
           onClick={() => {
             setData((st) => st.filter((it) => it !== item));
             actionType.current = "delItem";
-            // refItems.current.splice(i, 1);
           }}
         >
           del
