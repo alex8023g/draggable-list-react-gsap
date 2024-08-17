@@ -23,9 +23,7 @@ function App() {
     "4 Delta",
   ]);
 
-  const actionType = useRef<"addItem" | "delItem" | "firstRender" | null>(
-    "firstRender"
-  );
+  const actionType = useRef<"addItem" | "delItem" | "dragItem" | null>(null);
 
   const refItems = useRef<HTMLLIElement[]>([]);
 
@@ -100,12 +98,15 @@ function App() {
               { y: fromIndex * rowSize },
               {
                 y: index * rowSize,
-                duration: 1,
+                duration: 0.3,
               }
             )
             .set(element, { zIndex: 0 });
-        } else if (actionType.current === "delItem") {
-          console.log("delItem");
+        } else if (
+          actionType.current === "delItem" ||
+          actionType.current === "dragItem"
+        ) {
+          console.log("delItem || dragItem");
           gsap.to(element, { y: index * rowSize });
         } else {
           console.log("else");
@@ -123,6 +124,7 @@ function App() {
         }
 
         function onDragFunc(this: Draggable) {
+          actionType.current = "dragItem";
           // Calculate the current index based on element's position
           const index = clamp(Math.round(this.y / rowSize), 0, total - 1);
 
