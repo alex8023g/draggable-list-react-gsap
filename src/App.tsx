@@ -158,7 +158,12 @@ function App() {
       <h1>List</h1>
       <ul className="g-container">
         {data.map((item, i) => (
-          <ListItem item={item} setData={setData} actionType={actionType} />
+          <ListItem
+            key={item}
+            item={item}
+            setData={setData}
+            actionType={actionType}
+          />
           // <li
           //   className="g-list-item"
           //   key={item}

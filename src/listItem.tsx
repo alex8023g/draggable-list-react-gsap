@@ -10,7 +10,6 @@ export default function ListItem({ item, setData, actionType }: Props) {
   return (
     <li
       className="g-list-item"
-      key={item}
       // ref={(el) => (refItems.current[i] = el!)}
     >
       <div className="item-content">
