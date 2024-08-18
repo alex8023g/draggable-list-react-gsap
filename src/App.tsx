@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import "./App.css";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Draggable } from "gsap/Draggable";
-import { nanoid } from "nanoid";
 import ListItem from "./components/ListItem";
 import { AddBtn } from "./components/AddBtn";
 
@@ -146,7 +145,9 @@ function App() {
   );
   return (
     <>
-      <h1>List</h1>
+      <h1 className="text-center bg-blue-500 sticky top-0 z-50 text-white py-3">
+        Tasks list
+      </h1>
       <ul className="g-container" ref={container}>
         {data.map((item, i) => (
           <ListItem
