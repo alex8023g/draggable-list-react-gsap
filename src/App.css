@@ -14,23 +14,18 @@ body {
 *:after {
   box-sizing: border-box;
 }
-
-.g-container {
+/* 
+.g-container--- {
   position: relative;
   top: 20px;
   left: 50%;
-  width: 400px;
-  /* height: 400px; */
+  width: 450px;
   height: 80%;
-  /* opacity: 0; */
-  /* visibility: hidden; */
   transform: translate(-50%, 0);
   cursor: grab;
-  /* overflow-y: scroll; */
-  /* overflow-x: visible; */
 }
 
-.g-list-item {
+.g-list-item--- {
   position: absolute;
   top: 0;
   left: 0;
@@ -38,7 +33,7 @@ body {
   width: 100%;
 }
 
-.item-content {
+.item-content--- {
   height: 100%;
   border: 0px solid rgba(123, 123, 123, 0.498039);
   border-radius: 4px;
@@ -49,4 +44,4 @@ body {
   font-weight: 400;
   background-color: rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
-}
+} */

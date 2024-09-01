@@ -1,10 +1,10 @@
-import { useRef, useState } from "react";
-import "./App.css";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { Draggable } from "gsap/Draggable";
-import ListItem from "./components/ListItem";
-import { AddBtn } from "./components/AddBtn";
+import { useRef, useState } from 'react';
+import './App.css';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { Draggable } from 'gsap/Draggable';
+import ListItem from './components/ListItem';
+import { AddBtn } from './components/AddBtn';
 
 type Sortable = {
   dragger: Draggable;
@@ -16,38 +16,33 @@ type Sortable = {
 gsap.registerPlugin(Draggable);
 gsap.registerPlugin(useGSAP);
 function App() {
-  const [data, setData] = useState([
-    "1 Alfa",
-    "2 Bravo",
-    "3 Charlie",
-    "4 Delta",
-  ]);
+  const [data, setData] = useState(['1 Alfa', '2 Bravo', '3 Charlie', '4 Delta']);
 
-  const actionType = useRef<"addItem" | "delItem" | "dragItem" | null>(null);
+  const actionType = useRef<'addItem' | 'delItem' | 'dragItem' | null>(null);
 
   const container = useRef<HTMLUListElement>(null);
 
   useGSAP(
     () => {
       const rowSize = 100; // => container height / number of items
-      const listItems = Array.from(document.querySelectorAll(".g-list-item")); // Array of elements
-      console.log("🚀 ~ App ~ listItems:", listItems);
+      const listItems = Array.from(document.querySelectorAll('.g-list-item')); // Array of elements
+      console.log('🚀 ~ App ~ listItems:', listItems);
       const sortables = listItems.map(Sortable); // Array of sortables
       const total = sortables.length;
       const dataClone = structuredClone(data);
       console.log(
-        "useGSAP:",
+        'useGSAP:',
         actionType.current,
-        "sortables.length:",
+        'sortables.length:',
         sortables.length,
         dataClone
       );
 
       function Sortable(element: Element, index: number) {
-        const content = element.querySelector(".item-content");
+        const content = element.querySelector('.item-content');
 
         const animation = gsap.to(content, {
-          boxShadow: "rgba(0,0,0,0.2) 0px 16px 32px 0px",
+          boxShadow: 'rgba(0,0,0,0.2) 0px 16px 32px 0px',
           force3D: true,
           scale: 1.1,
           paused: true,
@@ -61,14 +56,15 @@ function App() {
 
           onDrag: onDragFunc,
           onRelease: () => {
-            if (actionType.current !== "delItem") {
+            if (actionType.current !== 'delItem') {
               animation.reverse();
               gsap.to(element, { y: sortable.index * rowSize });
               setData(dataClone);
             }
           },
-          cursor: "inherit",
-          type: "y",
+          cursor: 'inherit',
+          type: 'y',
+          trigger: element.querySelector('.g-trigger'),
         });
 
         // Public properties and methods
@@ -79,7 +75,7 @@ function App() {
           setIndex: setIndex,
         };
 
-        if (actionType.current === "addItem") {
+        if (actionType.current === 'addItem') {
           const fromIndex = index === data.length - 1 ? index - 1 : index;
 
           const tl = gsap.timeline();
@@ -95,13 +91,13 @@ function App() {
             )
             .set(element, { zIndex: 0 });
         } else if (
-          actionType.current === "delItem" ||
-          actionType.current === "dragItem"
+          actionType.current === 'delItem' ||
+          actionType.current === 'dragItem'
         ) {
-          console.log("delItem || dragItem");
+          console.log('delItem || dragItem');
           gsap.to(element, { y: index * rowSize });
         } else {
-          console.log("else");
+          console.log('else');
           gsap.set(element, { y: index * rowSize });
         }
 
@@ -115,7 +111,7 @@ function App() {
         }
 
         function onDragFunc(this: Draggable) {
-          actionType.current = "dragItem";
+          actionType.current = 'dragItem';
           // Calculate the current index based on element's position
           const index = clamp(Math.round(this.y / rowSize), 0, total - 1);
 
@@ -145,17 +141,15 @@ function App() {
   );
   return (
     <>
-      <h1 className="text-center bg-blue-500 sticky top-0 z-50 text-white py-3">
+      <h1 className='text-center bg-blue-500 sticky top-0 z-50 text-white py-3'>
         Tasks list
       </h1>
-      <ul className="g-container" ref={container}>
-        {data.map((item, i) => (
-          <ListItem
-            key={item}
-            item={item}
-            setData={setData}
-            actionType={actionType}
-          />
+      <ul
+        className='g-container relative top-[20px] left-[50%] w-[450px] h-[80%] -translate-x-1/2'
+        ref={container}
+      >
+        {data.map((item) => (
+          <ListItem key={item} item={item} setData={setData} actionType={actionType} />
         ))}
       </ul>
       <AddBtn setData={setData} actionType={actionType} />
