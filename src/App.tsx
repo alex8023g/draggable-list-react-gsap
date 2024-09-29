@@ -13,12 +13,21 @@ type Sortable = {
   setIndex: (index: number) => void;
 };
 
+export type Data = { id: string; text: string; isDone: boolean };
+
+export type ActionType = 'addItem' | 'delDoneItem' | 'dragItem' | null;
+
 gsap.registerPlugin(Draggable);
 gsap.registerPlugin(useGSAP);
 function App() {
-  const [data, setData] = useState(['1 Alfa', '2 Bravo', '3 Charlie', '4 Delta']);
+  const [data, setData] = useState([
+    { id: 'adfa1', text: '1 Alfa', isDone: false },
+    { id: 'adfa2', text: '2 Bravo', isDone: false },
+    { id: 'adfa3', text: '3 Charlie', isDone: false },
+    { id: 'adfa4', text: '4 Delta', isDone: false },
+  ]);
 
-  const actionType = useRef<'addItem' | 'delItem' | 'dragItem' | null>(null);
+  const actionType = useRef<ActionType>(null);
 
   const container = useRef<HTMLUListElement>(null);
 
@@ -56,7 +65,7 @@ function App() {
 
           onDrag: onDragFunc,
           onRelease: () => {
-            if (actionType.current !== 'delItem') {
+            if (actionType.current !== 'delDoneItem') {
               animation.reverse();
               gsap.to(element, { y: sortable.index * rowSize });
               setData(dataClone);
@@ -76,7 +85,9 @@ function App() {
         };
 
         if (actionType.current === 'addItem') {
-          const fromIndex = index === data.length - 1 ? index - 1 : index;
+          // const fromIndex = index === data.length - 1 ? index - 1 : index;
+          const fromIndex =
+            index >= data.filter((it) => !it.isDone).length - 1 ? index - 1 : index;
 
           const tl = gsap.timeline();
 
@@ -91,10 +102,10 @@ function App() {
             )
             .set(element, { zIndex: 0 });
         } else if (
-          actionType.current === 'delItem' ||
+          actionType.current === 'delDoneItem' ||
           actionType.current === 'dragItem'
         ) {
-          console.log('delItem || dragItem');
+          console.log('delDoneItem || dragItem');
           gsap.to(element, { y: index * rowSize });
         } else {
           console.log('else');
@@ -145,11 +156,11 @@ function App() {
         Tasks list
       </h1>
       <ul
-        className='g-container relative top-[20px] left-[50%] w-[450px] h-[80%] -translate-x-1/2'
+        className='g-container relative top-[20px] left-[50%] w-full max-w-96 h-[80%] -translate-x-1/2'
         ref={container}
       >
         {data.map((item) => (
-          <ListItem key={item} item={item} setData={setData} actionType={actionType} />
+          <ListItem key={item.id} item={item} setData={setData} actionType={actionType} />
         ))}
       </ul>
       <AddBtn setData={setData} actionType={actionType} />
